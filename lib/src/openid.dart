@@ -115,14 +115,6 @@ class Issuer {
 
   /// Discovers the OpenId Provider's metadata based on its uri.
   static Future<Issuer> discover(Uri uri, {http.Client? httpClient}) async {
-    if (_discoveries[uri] != null) return _discoveries[uri]!;
-
-    var segments = uri.pathSegments.toList();
-    if (segments.isNotEmpty && segments.last.isEmpty) {
-      segments.removeLast();
-    }
-    segments.addAll(['.well-known', 'openid-configuration']);
-    uri = uri.replace(pathSegments: segments);
 
     var json = await http.get(uri, client: httpClient);
     return _discoveries[uri] = Issuer(OpenIdProviderMetadata.fromJson(json));
